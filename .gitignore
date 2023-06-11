@@ -1,0 +1,9 @@
+# env
+token.0
+data/watch
+
+# python
+__pycache__
+
+# IDE
+.vscode/

@@ -1,0 +1,14 @@
+{
+  "query": {
+    "max_results": 10,
+    "sort_by": "relevance",
+    "sort_order": "descending"
+  },
+  "watch": {
+    "sleep_time": 3600,
+    "cooldown": 5,
+    "max_results": 20,
+    "save_dir": "data/watch",
+    "publish_list": []
+  }
+}
