@@ -21,7 +21,7 @@ class Arxiv(commands.Cog):
         print("Arxiv cog ready")
 
     def _format_message(self, message: str, n=5500):
-        message = message.replace("\n", "").replace("$", "")
+        message = " ".join(message.split()).replace("$", "")
         return (message[:n] + ".....") if len(message) > n else message
 
     def _format_authors(self, paper):
@@ -45,18 +45,19 @@ class Arxiv(commands.Cog):
             await ctx.send("Error occured when trying to fetch arxiv database.")
             print(e)
 
+        size_footer =  len(search.query) + len(str(search.max_results)) + len(search.sort_by.value) + 41
         try:
             embed = Embed(color=0xFF5733)
             embed.set_author(name="ArXiV", url="https://arxiv.org", icon_url=self.bot.user.avatar.url)
             for result in search.results():
-                embed_resume = '. '.join(self._format_message(result.summary).split('. ')[:2])
+                embed_resume = self._format_message(result.summary, n=750)
+                if len(embed) + len(embed_resume) + len(result.title) > 6000: continue
                 embed.add_field(
                     name=f"{result.title}",
                     value=f"[[ArXiV]({result.entry_id})][[PAPER]({result.pdf_url})]\n{embed_resume}.",
                     inline=False)
-            embed_size = len(embed) + len(search.query) + len(str(search.max_results)) + len(search.sort_by.value) + 41
             embed.set_footer(
-                text=f"query: \"{search.query}\", limit: {search.max_results}, sort_by: {search.sort_by.value}, len: {embed_size}/6000")
+                text=f"query: \"{search.query}\", limit: {search.max_results}, sort_by: {search.sort_by.value}, len: {len(embed) + size_footer}/6000")
             await ctx.send(embed=embed)
         except BaseException as e:
             await ctx.send("Error occured.")
@@ -66,7 +67,7 @@ class Arxiv(commands.Cog):
     #  Config commands
     #
 
-    @arxiv.group(name="config", help="arxiv parameters management, show config with now subcommand")
+    @arxiv.group(name="config", help="arxiv parameters management, show config with no subcommand")
     async def config(self, ctx):
         if ctx.invoked_subcommand is None: await self.show_command(ctx)
 
@@ -116,7 +117,7 @@ class Arxiv(commands.Cog):
     #  Watcher commands
     #
 
-    @arxiv.group(name="watcher")
+    @arxiv.group(name="watcher", help="manage the tracking of an arxiv category")
     async def watcher(self, ctx):
         if ctx.invoked_subcommand is None: await ctx.send('please use a subcommand', delete_after=10)
 
@@ -158,7 +159,7 @@ class Arxiv(commands.Cog):
 
         await ctx.send(f"Category {category} successfully added !")
 
-    @watcher.command(name="remove", help="Remove category from the publish list",
+    @watcher.command(name="remove", help="Remove category from the publishing list",
                      aliases=["delete", "del", "suppr"])
     async def remove_command(self, ctx, category):
         # remove config config
