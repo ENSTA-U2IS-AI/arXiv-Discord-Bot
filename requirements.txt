@@ -1,4 +1,3 @@
 discord
 arxiv
 asyncio
-json
