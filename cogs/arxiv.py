@@ -196,9 +196,9 @@ class Arxiv(commands.Cog):
 
                 # post new papers into the right channel (keep chronology)
                 channel = self.bot.get_channel(x["channel"])
-                if channel is None: channel = DMChannel._from_message(
-                    channel_id=x["channel"], state=self.bot._connection)  # may be a dm channel
-                else: continue
+                if channel is None: 
+                    # may be a dm channel
+                    channel = DMChannel._from_message(channel_id=x["channel"], state=self.bot._connection)  
 
                 for paper in new_papers[::-1]:
                     # create embed
