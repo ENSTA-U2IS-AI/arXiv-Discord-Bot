@@ -50,7 +50,7 @@ class Arxiv(commands.Cog):
             embed = Embed(color=0xFF5733)
             embed.set_author(name="ArXiV", url="https://arxiv.org", icon_url=self.bot.user.avatar.url)
             for result in search.results():
-                embed_resume = self._format_message(result.summary, n=750)
+                embed_resume = self._format_message(result.summary, n=350)
                 if len(embed) + len(embed_resume) + len(result.title) > 6000: continue
                 embed.add_field(
                     name=f"{result.title}",
