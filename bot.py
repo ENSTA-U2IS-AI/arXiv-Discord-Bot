@@ -1,7 +1,7 @@
 from discord import Intents
 from discord.ext import commands
 
-OWNER_IDS = [309339634985467915]
+OWNER_IDS = []
 
 
 class Bot(commands.Bot):
