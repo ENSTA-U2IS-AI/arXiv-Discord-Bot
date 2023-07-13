@@ -49,13 +49,20 @@ class Arxiv(commands.Cog):
         try:
             embed = Embed(color=0xFF5733)
             embed.set_author(name="ArXiV", url="https://arxiv.org", icon_url=self.bot.user.avatar.url)
+            result_count = 0
             for result in search.results():
+                result_count += 1
                 embed_resume = self._format_message(result.summary, n=750)
                 if len(embed) + len(embed_resume) + len(result.title) > 6000: continue
                 embed.add_field(
                     name=f"{result.title}",
                     value=f"[[ArXiV]({result.entry_id})][[PAPER]({result.pdf_url})]\n{embed_resume}.",
                     inline=False)
+            if not result_count:
+                embed.add_field(
+                    name="No result found for given search query",
+                    value=""
+                )
             embed.set_footer(
                 text=f"query: \"{search.query}\", limit: {search.max_results}, sort_by: {search.sort_by.value}, len: {len(embed) + size_footer}/6000")
             await ctx.send(embed=embed)
