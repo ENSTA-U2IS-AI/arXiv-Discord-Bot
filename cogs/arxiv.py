@@ -45,14 +45,14 @@ class Arxiv(commands.Cog):
             await ctx.send("Error occured when trying to fetch arxiv database.")
             print(e)
 
-        size_footer =  len(search.query) + len(str(search.max_results)) + len(search.sort_by.value) + 41
+        size_footer = len(search.query) + len(str(search.max_results)) + len(search.sort_by.value) + 41
         try:
             embed = Embed(color=0xFF5733)
             embed.set_author(name="ArXiV", url="https://arxiv.org", icon_url=self.bot.user.avatar.url)
             result_count = 0
             for result in search.results():
                 result_count += 1
-                embed_resume = self._format_message(result.summary, n=750)
+                embed_resume = self._format_message(result.summary, n=350)
                 if len(embed) + len(embed_resume) + len(result.title) > 6000: continue
                 embed.add_field(
                     name=f"{result.title}",
@@ -203,9 +203,9 @@ class Arxiv(commands.Cog):
 
                 # post new papers into the right channel (keep chronology)
                 channel = self.bot.get_channel(x["channel"])
-                if channel is None: 
+                if channel is None:
                     # may be a dm channel
-                    channel = DMChannel._from_message(channel_id=x["channel"], state=self.bot._connection)  
+                    channel = DMChannel._from_message(channel_id=x["channel"], state=self.bot._connection)
 
                 for paper in new_papers[::-1]:
                     # create embed
